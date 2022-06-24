@@ -49,8 +49,6 @@ function register() {
     </>
   );
 }
-
-
 const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;
@@ -60,7 +58,8 @@ const FormContainer = styled.div`
   gap: lrem;
   align-items: center;
   background-color: #131324;
-  .brand{
+  /* logo format */
+  .brand {
     display: flwx;
     align-items: center;
     gap: lrem;
@@ -68,7 +67,7 @@ const FormContainer = styled.div`
     img {
       height: 5rem;
     }
-    h1{
+    h1 {
       color: white;
       text-transform: uppercase;
     }
@@ -87,12 +86,13 @@ const FormContainer = styled.div`
       border-radius: 0.4rem;
       color: white;
       width: 100%;
-      front-size: 1rem;
+      font-size: 1rem;
+      /* :focus -- CSS pseudo-class which applies when the user clicks or taps on the input */
+      /* & -- a single ampersand refers to all instances of the component; it is used for applying broad overrides: */
       &:focus {
-        brder: 0.1rem solid #997af0;
+        border: 0.1rem solid #997af0;
         outline: none;
       }
-
     }
   }
 `;
