@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
+// A Hook is a special function that lets you “hook into” React features.
+// For example, useState: add React state to function components. useEffect: side effect after render.
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
 
 function Register() {
+  // useState declares a “state variable”: values. It is PRESERVED between function calls!
+  // The only argument to the useState() Hook is the initial state. Unlike with classes, the state doesn’t have to be an object.
+  // It returns a pair of values: the current state and a function that updates it.
+  // React will remember its current value between re-renders, and provide the MOST RECENT one to our function.
   const [values, setValues] = useState({
     username: "",
     email: "",
