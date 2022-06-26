@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
-function register() {
+
+function Register() {
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     alert("form");
   };
-  const handleChange = (event) => {};
+
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  };
+
   return (
     <>
       <FormContainer>
@@ -94,7 +106,31 @@ const FormContainer = styled.div`
         outline: none;
       }
     }
+    button {
+      background-color: #997af0;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 0.4rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+      transition: 0.5s ease-in-out;
+      &:hover {
+        background-color: #4e0eff;
+      }
+    }
+    span {
+      color: white;
+      text-transform: uppercase;
+      a {
+        color: #4e0eff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    }
   }
 `;
 
-export default register;
+export default Register;
