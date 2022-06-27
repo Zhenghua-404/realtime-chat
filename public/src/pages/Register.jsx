@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 // A Hook is a special function that lets you “hook into” React features.
 // For example, useState: add React state to function components. useEffect: side effect after render.
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { registerRoute } from "../utils/APIRoutes";
 
 function Register() {
   // useState declares a “state variable”: values. It is PRESERVED between function calls!
   // The only argument to the useState() Hook is the initial state. Unlike with classes, the state doesn’t have to be an object.
   // It returns a pair of values: the current state and a function that updates it.
   // React will remember its current value between re-renders, and provide the MOST RECENT one to our function.
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -17,9 +22,59 @@ function Register() {
     confirmPassword: "",
   });
 
-  const handleSubmit = (event) => {
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert("form");
+    if (handleValidation()) {
+      console.log("in valiadation", registerRoute);
+      const { username, email, password } = values;
+      const { data } = await axios.post(registerRoute, {
+        username,
+        email,
+        password,
+      });
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+        navigate("/");
+      }
+    }
+  };
+
+  const handleValidation = () => {
+    const { username, email, password, confirmPassword } = values;
+    if (password !== confirmPassword) {
+      toast.error(
+        "Password and confirm password should be the same.",
+        toastOptions
+      );
+      return false;
+    } else if (username.length < 3) {
+      toast.error(
+        "Username should be equal or greater than 3 characters",
+        toastOptions
+      );
+      return false;
+    } else if (password.length < 8) {
+      toast.error(
+        "Password should be equal or greater than 8 characters",
+        toastOptions
+      );
+      return false;
+    } else if (email === "") {
+      toast.error("Email is required.", toastOptions);
+      return false;
+    }
+    return true;
   };
 
   const handleChange = (event) => {
@@ -29,7 +84,7 @@ function Register() {
   return (
     <>
       <FormContainer>
-        <form on Submit={(event) => handleSubmit(event)}>
+        <form onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="Logo" />
             <h1>snappy</h1>
@@ -64,9 +119,11 @@ function Register() {
           </span>
         </form>
       </FormContainer>
+      <ToastContainer />
     </>
   );
 }
+
 const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;
