@@ -30,10 +30,15 @@ function Register() {
     theme: "dark",
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/");
+    }
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      console.log("in valiadation", registerRoute);
       const { username, email, password } = values;
       const { data } = await axios.post(registerRoute, {
         username,
