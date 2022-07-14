@@ -2,33 +2,56 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Contacts from "../components/Contacts";
+import { allUsersRoute } from "../utils/APIRoutes";
+import Welcome from "../components/Welcome";
 
 function Chat() {
   const [contacts, setContacts] = useState([]);
-  const [currentUser, setCurrentUser] = useSate(undefined);
+  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(undefined);
   const navigate = useNavigate();
-  useEffect(async () => {
-    if (!localStorage.getItem("chat-app-user")) {
-      navigate("/login");
-    } else {
-      setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
-    }
-  }, []);
-  useEffect(async () => {
-    if (currentUser) {
-      // if the current user hasn't set the avatar yet, redirect to set avatar first
-      if (currentUser.isAvatarImageSet) {
-        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-        setContacts(data.data);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!localStorage.getItem("chat-app-user")) {
+        navigate("/login");
       } else {
-        navigate("/setAvatar");
+        setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
+        // console.log({ currentUser });
       }
     }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (currentUser) {
+        // if the current user hasn't set the avatar yet, redirect to set avatar first
+        if (currentUser.isAvatarImageSet) {
+          const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+          setContacts(data.data);
+        } else {
+          navigate("/setAvatar");
+        }
+      }
+    }
+    fetchData();
   }, [currentUser]);
+
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
+
   return (
     <Container>
       <div className="container">
-        <Contacts contacts={contacts} currentUser={currentUser} />
+        <Contacts
+          contacts={contacts}
+          currentUser={currentUser}
+          changeChat={handleChatChange}
+        />
+        <Welcome currentUser={currentUser} />
       </div>
     </Container>
   );
