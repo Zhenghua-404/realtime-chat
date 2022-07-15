@@ -13,7 +13,7 @@ Welcome! This is a real-time chat app using Nodejs, React, MongoDB and Socket.io
 
 4. install dependencies for public:<br/>
    `cd ../public`<br/>
-   `yarn add axios styled-components react-router-dom buffer`
+   `yarn add axios styled-components react-router-dom buffer react-icons`
 
 5. start the app:<br/>
    `yarn start (localhost:3000 should open)`
